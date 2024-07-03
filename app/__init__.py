@@ -10,9 +10,9 @@ def create_app():
     from app.routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    @app.route('/upload')
-    def upload_file():
-        return render_template('upload.html')
+    # Configurar la carpeta de plantillas
+    app.template_folder = 'templates'
+
 
     # Crear la carpeta de subida si no existe
     #from os import path, mkdir
