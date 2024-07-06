@@ -1,63 +1,119 @@
 import os
-import csv
-from flask import Blueprint, render_template, request, jsonify, current_app
+import json
+from flask import Blueprint, request, jsonify, current_app
 
 main = Blueprint('main', __name__)
+
+DATA_FILE = 'data.json'
+
+# Cargar datos desde el archivo JSON
+def load_data():
+    if not os.path.exists(DATA_FILE):
+        return {"holders": [], "initiatives": []}
+    with open(DATA_FILE, 'r') as f:
+        return json.load(f)
+
+# Guardar datos en el archivo JSON
+def save_data(data):
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+
+# Rutas para la tabla 'holders'
+@main.route('/holders', methods=['GET'])
+def get_holders():
+    data = load_data()
+    return jsonify(data['holders'])
+
+@main.route('/holders', methods=['POST'])
+def create_holder():
+    new_holder = request.json
+    data = load_data()
+    data['holders'].append(new_holder)
+    save_data(data)
+    return jsonify(new_holder), 201
+
+@main.route('/holders/<int:id>', methods=['GET'])
+def get_holder(id):
+    data = load_data()
+    holder = next((h for h in data['holders'] if h['id'] == id), None)
+    if holder is None:
+        return jsonify({"error": "Holder not found"}), 404
+    return jsonify(holder)
+
+@main.route('/holders/<int:id>', methods=['PUT'])
+def update_holder(id):
+    updated_holder = request.json
+    data = load_data()
+    holder = next((h for h in data['holders'] if h['id'] == id), None)
+    if holder is None:
+        return jsonify({"error": "Holder not found"}), 404
+    holder.update(updated_holder)
+    save_data(data)
+    return jsonify(holder)
+
+@main.route('/holders/<int:id>', methods=['DELETE'])
+def delete_holder(id):
+    data = load_data()
+    holder = next((h for h in data['holders'] if h['id'] == id), None)
+    if holder is None:
+        return jsonify({"error": "Holder not found"}), 404
+    data['holders'].remove(holder)
+    save_data(data)
+    return '', 204
+
+# Rutas para la tabla 'initiatives'
+@main.route('/initiatives', methods=['GET'])
+def get_initiatives():
+    data = load_data()
+    return jsonify(data['initiatives'])
+
+@main.route('/initiatives', methods=['POST'])
+def create_initiative():
+    new_initiative = request.json
+    data = load_data()
+    data['initiatives'].append(new_initiative)
+    save_data(data)
+    return jsonify(new_initiative), 201
+
+@main.route('/initiatives/<int:id>', methods=['GET'])
+def get_initiative(id):
+    data = load_data()
+    initiative = next((i for i in data['initiatives'] if i['id'] == id), None)
+    if initiative is None:
+        return jsonify({"error": "Initiative not found"}), 404
+    return jsonify(initiative)
+
+@main.route('/initiatives/<int:id>', methods=['PUT'])
+def update_initiative(id):
+    updated_initiative = request.json
+    data = load_data()
+    initiative = next((i for i in data['initiatives'] if i['id'] == id), None)
+    if initiative is None:
+        return jsonify({"error": "Initiative not found"}), 404
+    initiative.update(updated_initiative)
+    save_data(data)
+    return jsonify(initiative)
+
+@main.route('/initiatives/<int:id>', methods=['DELETE'])
+def delete_initiative(id):
+    data = load_data()
+    initiative = next((i for i in data['initiatives'] if i['id'] == id), None)
+    if initiative is None:
+        return jsonify({"error": "Initiative not found"}), 404
+    data['initiatives'].remove(initiative)
+    save_data(data)
+    return '', 204
 
 # Example test Hello World
 @main.route('/api', methods=['GET'])
 def api_root():
     return jsonify(message="Hello, World!!")
- 
-# Example json list users data enpoint
-@main.route('/api/users', methods=['GET'])
-def get_users():
+
+# Example json list users data endpoint
+@main.route('/users', methods=['GET'])
+def list_users():
     users = [
-        {'id': 1, 'name': 'Alice'},
-        {'id': 2, 'name': 'Bob'}
+        {"id": 1, "name": "John Doe"},
+        {"id": 2, "name": "Jane Doe"}
     ]
-    return jsonify(users=users)
-
-# Enpoint for do post verbose .csv
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'csv'}
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@main.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return jsonify(error="No file part"), 400
-
-        file = request.files['file']
-
-        if file.filename == '':
-            return jsonify(error="No selected file"), 400
-
-        if file and allowed_file(file.filename):
-            filename = file.filename
-            file.save(os.path.join(current_app.root_path, UPLOAD_FOLDER, filename))
-            return jsonify(message="File uploaded successfully", filename=filename), 201
-        else:
-            return jsonify(error="Allowed file types are .csv"), 400
-    
-    # Si es un GET, mostrar la interfaz para cargar el archivo
-    return render_template('upload.html')
-
-# Enpoint for do Get of .csv
-@main.route('/data', methods=['GET'])
-def get_data():
-    csv_data = []
-    csv_path = os.path.join(current_app.root_path, UPLOAD_FOLDER, 'data.csv')
-    
-    try:
-        with open(csv_path, newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                csv_data.append(row)
-    except FileNotFoundError:
-        return jsonify(error="CSV file not found"), 404
-    
-    return jsonify(data=csv_data), 200
+    return jsonify(users)

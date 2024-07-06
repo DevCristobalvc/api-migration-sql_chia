@@ -1,0 +1,82 @@
+{
+    "holders": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "phone": "123-456-7890",
+        "address": "123 Main St, Anytown, USA"
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane.smith@example.com",
+        "phone": "234-567-8901",
+        "address": "456 Oak St, Anytown, USA"
+      },
+      {
+        "id": 3,
+        "name": "Bob Johnson",
+        "email": "bob.johnson@example.com",
+        "phone": "345-678-9012",
+        "address": "789 Pine St, Anytown, USA"
+      },
+      {
+        "id": 4,
+        "name": "Alice Brown",
+        "email": "alice.brown@example.com",
+        "phone": "456-789-0123",
+        "address": "101 Maple St, Anytown, USA"
+      },
+      {
+        "id": 5,
+        "name": "Charlie Davis",
+        "email": "charlie.davis@example.com",
+        "phone": "567-890-1234",
+        "address": "202 Birch St, Anytown, USA"
+      }
+    ],
+    "initiatives": [
+      {
+        "id": 1,
+        "title": "Community Cleanup",
+        "description": "Organize a community cleanup event.",
+        "start_date": "2024-07-15",
+        "end_date": "2024-07-16",
+        "organizer_id": 1
+      },
+      {
+        "id": 2,
+        "title": "Charity Run",
+        "description": "Host a charity run to raise funds.",
+        "start_date": "2024-08-01",
+        "end_date": "2024-08-02",
+        "organizer_id": 2
+      },
+      {
+        "id": 3,
+        "title": "Food Drive",
+        "description": "Collect and distribute food to those in need.",
+        "start_date": "2024-09-05",
+        "end_date": "2024-09-06",
+        "organizer_id": 3
+      },
+      {
+        "id": 4,
+        "title": "Blood Donation Camp",
+        "description": "Organize a blood donation camp.",
+        "start_date": "2024-10-10",
+        "end_date": "2024-10-11",
+        "organizer_id": 4
+      },
+      {
+        "id": 5,
+        "title": "Tree Planting",
+        "description": "Plan a tree planting event.",
+        "start_date": "2024-11-15",
+        "end_date": "2024-11-16",
+        "organizer_id": 5
+      }
+    ]
+  }
+  
